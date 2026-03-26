@@ -475,7 +475,7 @@
 
 <!-- HEADER -->
 <header>
-  <div class="logo">
+  <div class="logo" onclick="goToStep(1); clearStep();" style="cursor:pointer;" title="トップに戻る">
     <div class="logo-icon">🔍</div>
     <div class="logo-text"><span>採用</span>みっけ</div>
   </div>
@@ -1141,13 +1141,13 @@ async function generateContent() {
 以下の4種類を、それぞれ【タグ】で区切って出力してください。
 
 【SNS投稿文】
-${selectedSNS}に最適化した投稿文（絵文字・ハッシュタグ含む。${selectedSNS === 'X（Twitter）' ? '140文字以内' : '300〜500文字程度'}）
+${selectedSNS}に最適化した投稿文。必ず実際の改行（段落ごとに空行）を入れて、SNSにそのままコピペできる形で出力してください。絵文字・ハッシュタグ含む。${selectedSNS === 'X（Twitter）' ? '140文字以内。短い文を改行でテンポよく並べる。' : '300〜500文字程度。1〜2文ごとに改行し、読みやすい縦長レイアウトにする。'}
 
 【求人票（Indeed代替）】
 タイトル・仕事内容・こんな方歓迎・待遇・一言メッセージを含む求人票（300〜400文字）
 
 【LINE配信文】
-LINE公式アカウント向け配信メッセージ（200〜300文字、温かみのある語り口）
+LINE公式アカウント向け配信メッセージ（200〜300文字、温かみのある語り口）。LINEらしく短い文を改行でテンポよく並べ、そのまま送れる形で出力してください。
 
 【キャッチコピー3案】
 SNSキャプションやストーリーに使えるキャッチコピー3案（各1〜2行、インパクト重視）
@@ -1213,7 +1213,7 @@ function renderResult(raw, strengthTags, meritTags) {
     tabBar.appendChild(tab);
     const content = document.createElement('div');
     content.className = 'result-content' + (idx === 0 ? ' active' : '');
-    content.innerHTML = `<div class="result-card"><div class="result-card-label">${sec.icon} ${sec.label}</div><button class="copy-btn" onclick="copyText(this)">コピー</button><div class="result-text">${escapeHtml(text)}</div><div class="char-count">${text.length}文字</div></div>`;
+    content.innerHTML = `<div class="result-card"><div class="result-card-label">${sec.icon} ${sec.label}</div><button class="copy-btn" onclick="copyText(this)">コピー</button><div class="result-text" data-raw="${encodeURIComponent(text)}">${escapeHtml(text)}</div><div class="char-count">${text.length}文字</div></div>`;
     contents.appendChild(content);
   });
 
@@ -1284,7 +1284,9 @@ function indeedCopy(btn) {
 }
 
 function copyText(btn) {
-  const text = btn.closest('.result-card').querySelector('.result-text').textContent;
+  const el = btn.closest('.result-card').querySelector('.result-text');
+  const raw = el.dataset.raw;
+  const text = raw ? decodeURIComponent(raw) : el.textContent;
   navigator.clipboard.writeText(text).then(() => {
     btn.textContent = '✓ コピー済み'; btn.classList.add('copied');
     showToast('📋 クリップボードにコピーしました！');

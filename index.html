@@ -4,26 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>採用みっけ｜あなたの会社の魅力を、届く言葉に。</title>
-<meta name="description" content="会社情報を設定して3ステップ入力するだけ。AIが求人票・SNS投稿・LINE配信文を自動生成します。広告費ゼロ、3分で完成。">
-
-<!-- OGP設定 -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="採用みっけ｜あなたの会社の魅力を、届く言葉に。">
-<meta property="og:description" content="会社情報を設定して3ステップ入力するだけ。AIが求人票・SNS投稿・LINE配信文を自動生成します。広告費ゼロ、3分で完成。">
-<meta property="og:url" content=""> <!-- ※本番環境では https://〜 の絶対URLを入力してください -->
-<meta property="og:image" content="ogp.jpg"> <!-- ※本番環境では絶対URL推奨 -->
-<meta property="og:site_name" content="採用みっけ">
-
-<!-- Twitterカード設定 -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="採用みっけ｜あなたの会社の魅力を、届く言葉に。">
-<meta name="twitter:description" content="会社情報を設定して3ステップ入力するだけ。AIが求人票・SNS投稿・LINE配信文を自動生成します。広告費ゼロ、3分で完成。">
-<meta name="twitter:image" content="ogp.jpg"> <!-- ※本番環境では絶対URL推奨 -->
-
-<!-- ファビコン設定 -->
-<link rel="icon" href="favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="favicon.png">
-
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -119,7 +99,7 @@
   .step-item.active .step-label { color: var(--green); font-weight: 700; }
 
   /* MAIN */
-  .main { max-width: 480px; margin: 0 auto; padding: 24px 16px 100px; }
+  .main { max-width: 480px; margin: 0 auto; padding: 24px 16px 130px; }
   .panel { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px; border: 1px solid var(--border); display: none; animation: fadeSlide 0.4s ease; }
   .panel.active { display: block; }
   @keyframes fadeSlide { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
@@ -490,35 +470,56 @@
   }
   .history-del-btn:hover { color: var(--coral); }
 
-  /* TRIAL COUNTER */
-  .trial-bar {
-    background: rgba(232,136,74,0.12);
-    border: 1px solid rgba(232,136,74,0.35);
-    border-radius: var(--radius2);
-    padding: 10px 16px;
+  /* TRIAL FIXED BANNER */
+  .trial-banner {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 150;
+    background: var(--amber);
+    color: white;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
     gap: 10px;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+    transition: background 0.4s;
+    max-width: 100%;
   }
-  .trial-bar.unlimited {
-    background: rgba(74,158,110,0.10);
-    border-color: rgba(74,158,110,0.35);
+  .trial-banner.danger {
+    background: var(--coral);
   }
-  .trial-left { font-size: 13px; color: var(--text2); line-height: 1.5; }
-  .trial-left strong { color: var(--amber); font-size: 15px; }
-  .trial-bar.unlimited .trial-left strong { color: var(--green3); }
-  .trial-dots { display: flex; gap: 4px; flex-shrink: 0; }
-  .trial-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--amber);
-    opacity: 0.25;
-    transition: opacity 0.3s;
+  .trial-banner.unlocked {
+    background: var(--green3);
   }
-  .trial-dot.used { opacity: 1; }
-  .trial-dot.unlimited-dot { background: var(--green3); opacity: 1; }
+  .trial-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    flex: 1;
+  }
+  .trial-banner-left .tb-icon { font-size: 16px; flex-shrink: 0; }
+  .trial-banner-right { flex-shrink: 0; }
+  .trial-cta-btn {
+    background: white;
+    color: var(--coral);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    padding: 7px 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .trial-cta-btn:hover { transform: scale(1.05); }
+  .trial-cta-btn.green { color: var(--green); }
 
   /* UNLOCK MODAL */
   .unlock-input-wrap {
@@ -636,14 +637,6 @@
 
   <!-- STEP 1: 採用条件 -->
   <div class="panel active" id="panel-1">
-    <div class="trial-bar" id="trial-bar">
-      <div class="trial-left" id="trial-text">残り <strong id="trial-count">3</strong> 回 無料で使えます</div>
-      <div class="trial-dots" id="trial-dots">
-        <div class="trial-dot" id="td1"></div>
-        <div class="trial-dot" id="td2"></div>
-        <div class="trial-dot" id="td3"></div>
-      </div>
-    </div>
     <div class="panel-title">
       <div class="panel-icon amber">👤</div>
       <div>
@@ -859,6 +852,15 @@
       <div id="history-list-area"></div>
     </div>
   </div>
+</div>
+
+<!-- TRIAL FIXED BANNER -->
+<div class="trial-banner" id="trial-banner">
+  <div class="trial-banner-left">
+    <span class="tb-icon" id="tb-icon">🎁</span>
+    <span id="tb-text">今なら3回まで無料でお試しいただけます（登録不要）</span>
+  </div>
+  <div class="trial-banner-right" id="tb-right"></div>
 </div>
 
 <!-- FOOTER -->
@@ -1093,22 +1095,41 @@ function unlock() {
 function updateTrialBar() {
   const used = getTrialCount();
   const unlocked = isUnlocked();
-  const bar = document.getElementById('trial-bar');
-  const text = document.getElementById('trial-text');
-  const dots = document.getElementById('trial-dots');
-  if (!bar) return;
+  const banner = document.getElementById('trial-banner');
+  const icon = document.getElementById('tb-icon');
+  const text = document.getElementById('tb-text');
+  const right = document.getElementById('tb-right');
+  if (!banner) return;
+
+  banner.classList.remove('danger', 'unlocked');
+
   if (unlocked) {
-    bar.classList.add('unlimited');
-    text.innerHTML = '<strong>✅ 無制限プラン</strong> ご利用中';
-    dots.innerHTML = '<div class="trial-dot unlimited-dot"></div><div class="trial-dot unlimited-dot"></div><div class="trial-dot unlimited-dot"></div><span style="font-size:11px;color:var(--green3);margin-left:4px;">∞</span>';
+    // 無制限プラン
+    banner.classList.add('unlocked');
+    icon.textContent = '✅';
+    text.textContent = '無制限プラン ご利用中';
+    right.innerHTML = '';
+  } else if (used === 0) {
+    // 初回未使用
+    icon.textContent = '🎁';
+    text.textContent = '今なら3回まで無料でお試しいただけます（登録不要）';
+    right.innerHTML = '';
+  } else if (used === 1) {
+    // 1回使用後
+    icon.textContent = '🎁';
+    text.textContent = '無料体験 残り2回（全3回）';
+    right.innerHTML = '';
+  } else if (used === 2) {
+    // 2回使用後
+    icon.textContent = '🎁';
+    text.textContent = '無料体験 残り1回（全3回）';
+    right.innerHTML = '';
   } else {
-    const remaining = Math.max(0, FREE_LIMIT - used);
-    bar.classList.remove('unlimited');
-    text.innerHTML = `残り <strong id="trial-count">${remaining}</strong> 回 無料で使えます`;
-    for (let i = 1; i <= FREE_LIMIT; i++) {
-      const dot = document.getElementById('td' + i);
-      if (dot) dot.classList.toggle('used', i <= used);
-    }
+    // 3回使用後（終了）
+    banner.classList.add('danger');
+    icon.textContent = '⚠️';
+    text.textContent = '無料体験が終了しました';
+    right.innerHTML = `<a href="${STRIPE_LINK}" target="_blank" class="trial-cta-btn">ご購入はこちら →</a>`;
   }
 }
 
